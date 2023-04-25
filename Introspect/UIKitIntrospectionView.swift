@@ -71,7 +71,9 @@ public struct UIKitIntrospectionView<TargetViewType: UIView>: UIViewRepresentabl
     /// `makeUIView`, so we need to call the handler again to allow re-customization
     /// based on the newest state.
     public func updateUIView(_ view: IntrospectionUIView, context: Context) {
-        self.notify(view)
+        DispatchQueue.main.async {
+            self.notify(view)
+        }
     }
     
     /// Avoid memory leaks.

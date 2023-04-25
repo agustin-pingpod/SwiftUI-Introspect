@@ -75,7 +75,9 @@ public struct UIKitIntrospectionViewController<TargetViewControllerType: UIViewC
     /// `makeUIViewController`, so we need to call the handler again to allow re-customization
     /// based on the newest state.
     public func updateUIViewController(_ viewController: IntrospectionUIViewController, context: Context) {
-        self.notify(viewController)
+        DispatchQueue.main.async {
+            self.notify(viewController)
+        }
     }
 
     /// Avoid memory leaks.
