@@ -5,7 +5,7 @@ import SwiftUI
 /// Introspection UIView that is inserted alongside the target view.
 public class IntrospectionUIView: UIView {
     
-    var moveToWindowHandler: (() -> Void)?
+    var moveToWindowHandler: ((IntrospectionUIView) -> Void)?
     
     required init() {
         super.init(frame: .zero)
@@ -20,7 +20,7 @@ public class IntrospectionUIView: UIView {
     
     override public func didMoveToWindow() {
         super.didMoveToWindow()
-        moveToWindowHandler?()
+        moveToWindowHandler?(self)
     }
 }
 
@@ -42,23 +42,24 @@ public struct UIKitIntrospectionView<TargetViewType: UIView>: UIViewRepresentabl
         self.selector = selector
         self.customize = customize
     }
+
+    private func notify(_ view: IntrospectionUIView) {
+        guard let targetView = selector(view)
+            return
+        }
+        customize(targetView)
+    }
     
     /// When `makeUIView` and `updateUIView` are called, the Introspection view is not yet in the UIKit hierarchy.
     /// At this point, `introspectionView.superview.superview` is nil and we can't access the target UIKit view.
     /// To workaround this, we wait until the runloop is done inserting the introspection view in the hierarchy, then run the selector.
     /// Finding the target view fails silently if the selector yields no result. This happens when the introspection view gets
     /// removed from the hierarchy.
-    public func makeUIView(context: UIViewRepresentableContext<UIKitIntrospectionView>) -> IntrospectionUIView {
+    public func makeUIView(context: Context) -> IntrospectionUIView {
         let view = IntrospectionUIView()
         view.accessibilityLabel = "IntrospectionUIView<\(TargetViewType.self)>"
-        view.moveToWindowHandler = { [weak view] in
-            guard let view = view else { return }
-            DispatchQueue.main.async {
-                guard let targetView = self.selector(view) else {
-                    return
-                }
-                self.customize(targetView)
-            }
+        view.moveToWindowHandler = {
+            self.notify($0)
         }
         return view
     }
@@ -66,14 +67,8 @@ public struct UIKitIntrospectionView<TargetViewType: UIView>: UIViewRepresentabl
     /// SwiftUI state changes after `makeUIView` will trigger this function, not
     /// `makeUIView`, so we need to call the handler again to allow re-customization
     /// based on the newest state.
-    public func updateUIView(
-        _ view: IntrospectionUIView,
-        context: UIViewRepresentableContext<UIKitIntrospectionView>
-    ) {
-        guard let targetView = self.selector(view) else {
-            return
-        }
-        self.customize(targetView)
+    public func updateUIView(_ view: IntrospectionUIView, context: Context) {
+        self.notify(view)
     }
     
     /// Avoid memory leaks.
