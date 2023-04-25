@@ -2,9 +2,8 @@ import SwiftUI
 import Introspect
 
 struct ContentView: View {
-    @State private var selection = 0
     var body: some View {
-        TabView(selection: $selection) {
+        TabView {
             ListShowcase()
                 .tabItem { Text("List") }
                 .tag(0)
@@ -37,6 +36,7 @@ struct ListShowcase: View {
                     Text("Item 1")
                     Text("Item 2")
                 }
+                Spacer()
             }
 
             VStack {
@@ -50,6 +50,7 @@ struct ListShowcase: View {
                     tableView.separatorStyle = .none
                     #endif
                 }
+                Spacer()
             }
 
             VStack {
@@ -63,6 +64,7 @@ struct ListShowcase: View {
                             #endif
                         }
                 }
+                Spacer()
             }
         }
 
