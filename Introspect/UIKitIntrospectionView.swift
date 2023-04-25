@@ -44,7 +44,10 @@ public struct UIKitIntrospectionView<TargetViewType: UIView>: UIViewRepresentabl
     }
 
     private func notify(_ view: IntrospectionUIView) {
-        guard let targetView = selector(view)
+        guard
+            view.window != nil,
+            let targetView = selector(view)
+        else {
             return
         }
         customize(targetView)

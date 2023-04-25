@@ -46,7 +46,11 @@ public struct UIKitIntrospectionViewController<TargetViewControllerType: UIViewC
     }
 
     private func notify(_ viewController: IntrospectionUIViewController) {
-        guard let targetViewController = selector(viewController) else {
+        guard
+            viewController.isViewLoaded,
+            viewController.view.window != nil,
+            let targetViewController = selector(viewController)
+        else {
             return
         }
         customize(targetViewController)
