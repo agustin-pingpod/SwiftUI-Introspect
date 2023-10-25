@@ -260,8 +260,8 @@ private struct TextFieldTestView: View {
     }
 }
 
+#if !os(tvOS)
 @available(iOS 14, *)
-@available(tvOS, unavailable, message: "TextEditor is not available in tvOS.")
 private struct TextEditorTestView: View {
     let spy: () -> Void
     @State private var textEditorValue = ""
@@ -273,7 +273,6 @@ private struct TextEditorTestView: View {
     }
 }
 
-@available(tvOS, unavailable)
 private struct ToggleTestView: View {
     let spy: () -> Void
     @State private var toggleValue = false
@@ -285,7 +284,6 @@ private struct ToggleTestView: View {
     }
 }
 
-@available(tvOS, unavailable)
 private struct SliderTestView: View {
     let spy: () -> Void
     @State private var sliderValue = 0.0
@@ -297,7 +295,6 @@ private struct SliderTestView: View {
     }
 }
 
-@available(tvOS, unavailable)
 private struct StepperTestView: View {
     let spy: () -> Void
     var body: some View {
@@ -310,7 +307,6 @@ private struct StepperTestView: View {
     }
 }
 
-@available(tvOS, unavailable)
 private struct DatePickerTestView: View {
     let spy: () -> Void
     @State private var datePickerValue = Date()
@@ -323,6 +319,7 @@ private struct DatePickerTestView: View {
         }
     }
 }
+#endif
 
 private struct SegmentedControlTestView: View {
     @State private var pickerValue = 0
@@ -340,8 +337,8 @@ private struct SegmentedControlTestView: View {
     }
 }
 
+#if !os(tvOS)
 @available(iOS 14.0, *)
-@available(tvOS, unavailable)
 private struct ColorWellTestView: View {
     @State private var color = Color.black
     let spy: () -> Void
@@ -353,6 +350,7 @@ private struct ColorWellTestView: View {
         }
     }
 }
+#endif
 
 import MapKit
 @available(iOS 14, tvOS 14, *)

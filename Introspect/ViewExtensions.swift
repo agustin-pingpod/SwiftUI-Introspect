@@ -85,9 +85,9 @@ extension View {
         ))
     }
 
+#if !os(tvOS)
     /// Finds a `UISearchController` from a `SwiftUI.View` with a `.searchable` modifier
     @available(iOS 15, *)
-    @available(tvOS, unavailable)
     public func introspectSearchController(customize: @escaping (UISearchController) -> ()) -> some View {
         introspectNavigationController { navigationController in
             let navigationBar = navigationController.navigationBar
@@ -96,7 +96,8 @@ extension View {
             }
         }
     }
-    
+#endif
+
     /// Finds a `UITableView` from a `SwiftUI.List`, or `SwiftUI.List` child.
     public func introspectTableView(customize: @escaping (UITableView) -> ()) -> some View {
         introspect(selector: TargetViewSelector.ancestorOrSiblingContaining, customize: customize)
@@ -157,41 +158,40 @@ extension View {
         introspect(selector: TargetViewSelector.siblingContaining, customize: customize)
     }
     
+#if !os(tvOS)
     /// Finds a `UISwitch` from a `SwiftUI.Toggle`
-    @available(tvOS, unavailable)
     public func introspectSwitch(customize: @escaping (UISwitch) -> ()) -> some View {
         introspect(selector: TargetViewSelector.siblingContaining, customize: customize)
     }
     
     /// Finds a `UISlider` from a `SwiftUI.Slider`
-    @available(tvOS, unavailable)
     public func introspectSlider(customize: @escaping (UISlider) -> ()) -> some View {
         introspect(selector: TargetViewSelector.siblingContaining, customize: customize)
     }
     
     /// Finds a `UIStepper` from a `SwiftUI.Stepper`
-    @available(tvOS, unavailable)
     public func introspectStepper(customize: @escaping (UIStepper) -> ()) -> some View {
         introspect(selector: TargetViewSelector.siblingContaining, customize: customize)
     }
     
     /// Finds a `UIDatePicker` from a `SwiftUI.DatePicker`
-    @available(tvOS, unavailable)
     public func introspectDatePicker(customize: @escaping (UIDatePicker) -> ()) -> some View {
         introspect(selector: TargetViewSelector.siblingContaining, customize: customize)
     }
-    
+#endif
+
     /// Finds a `UISegmentedControl` from a `SwiftUI.Picker` with style `SegmentedPickerStyle`
     public func introspectSegmentedControl(customize: @escaping (UISegmentedControl) -> ()) -> some View {
         introspect(selector: TargetViewSelector.siblingContaining, customize: customize)
     }
     
+#if !os(tvOS)
     /// Finds a `UIColorWell` from a `SwiftUI.ColorPicker`
     @available(iOS 14, *)
-    @available(tvOS, unavailable)
     public func introspectColorWell(customize: @escaping (UIColorWell) -> ()) -> some View {
         introspect(selector: TargetViewSelector.siblingContaining, customize: customize)
     }
+#endif
 }
 #endif
 
